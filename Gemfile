@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem 'sinatra'
-gem 'thin'
+gem 'unicorn'
 gem 'json'
 gem 'require_all'
 gem 'sinatra-contrib'
