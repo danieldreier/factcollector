@@ -11,10 +11,14 @@ def valid_json?(json)
   end
 end
 
+get '/' do
+  "factcollector is running \n"
+end
+
 post '/' do
   request_payload = request.body.read
   halt 500, 'invalid JSON' unless valid_json?(request_payload)
-  filename = 'uploads/' + SecureRandom.uuid.to_s + '.json'
+  filename = '/opt/uploads/' + SecureRandom.uuid.to_s + '.json'
   open(filename, 'w') { |f|
     f.puts request_payload
   }
