@@ -13,7 +13,8 @@ nginx::resource::vhost { 'facts.whilefork.com':
 
 ruby::bundle { 'factcollector':
   cwd     => '/opt/factcollector',
-  require => Vcsrepo['/opt/factcollector'],
+  require => [ Vcsrepo['/opt/factcollector'],
+               Package['build-essential'] ],
 }
 
 unicorn::app { 'factcollector':
@@ -29,6 +30,7 @@ unicorn::app { 'factcollector':
     Class['ruby::dev'],
     Ruby::Bundle['factcollector'],
     Vcsrepo['/opt/factcollector'],
+    Package['build-essential'],
   ],
 }
 
@@ -38,7 +40,7 @@ file { '/opt/uploads':
   group  => 'www-data',
 }
 
-package { 'git':
+package { ['git', 'build-essential']:
   ensure => present
 }
 
