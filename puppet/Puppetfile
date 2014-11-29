@@ -1,0 +1,10 @@
+moduledir '/etc/puppet/modules'
+
+mod 'jfryman/nginx'
+mod 'puppetlabs/ruby'
+mod 'ploperations/bundler'
+mod 'ploperations/unicorn'
+mod 'ploperations/rack'
+mod 'puppetlabs/apt'
+mod 'puppetlabs/concat'
+mod 'puppetlabs/stdlib'
