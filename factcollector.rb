@@ -11,8 +11,10 @@ def valid_json?(json)
   end
 end
 
-get '/' do
-  "factcollector is running \n"
+set :public_folder, 'public'
+
+get "/" do
+  redirect '/index.html'
 end
 
 post '/' do
