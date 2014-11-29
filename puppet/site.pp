@@ -13,6 +13,7 @@ nginx::resource::vhost { 'facts.whilefork.com':
 
 ruby::bundle { 'factcollector':
   cwd     => '/opt/factcollector',
+  require => Vcsrepo['/opt/factcollector'],
 }
 
 unicorn::app { 'factcollector':
@@ -27,11 +28,23 @@ unicorn::app { 'factcollector':
   require     => [
     Class['ruby::dev'],
     Ruby::Bundle['factcollector'],
+    Vcsrepo['/opt/factcollector'],
   ],
 }
 
 file { '/opt/uploads':
   ensure => 'directory',
-  user   => 'www-data',
+  owner  => 'www-data',
   group  => 'www-data',
+}
+
+package { 'git':
+  ensure => present
+}
+
+vcsrepo { "/opt/factcollector":
+  ensure   => present,
+  provider => git,
+  source   => 'https://github.com/danieldreier/factcollector.git',
+  notify   => Service['unicorn_factcollector'],
 }
