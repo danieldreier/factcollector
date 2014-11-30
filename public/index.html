@@ -28,11 +28,11 @@
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
     ga('create', 'UA-57212832-1', 'auto');
+    ga('require', 'linkid', 'linkid.js');
     ga('send', 'pageview');
-
   </script>
 
 		<section class="featured">
@@ -91,7 +91,7 @@
                   <pre><code class="bash"> facter --json | curl -H "Content-Type: application/json" -d @- http://facts.whilefork.com </code></pre>
                 </div>
                 <p>If you prefer to copy and paste (perhaps if you're on windows and lack curl), submit your JSON fact hash as an issue on the <a href="https://github.com/danieldreier/puppet_spec_facts/issues">github project</a>. You can generate the json by running: </p>
-                  <pre><code class="bash"> facter --json </code></pre>
+                <pre><code class="bash"> facter --json </code></pre>
 						</div>
 					</div>
 				</div>
@@ -122,5 +122,27 @@
 	<script src="js/jquery.appear.js"></script>
 	<script src="js/validate.js"></script>
     <script src="js/main.js"></script>
+
+  <script type="text/javascript">
+  // Track copied content adapted from Onderweg & Tim Down by Robert Kingston - http://www.optimisationbeacon.com/
+  // Get Selection Text function by Tim Down - http://stackoverflow.com/a/5379408/458627
+  function getSelectionText() {
+      var e = "";
+      if (window.getSelection) {
+          e = window.getSelection().toString()
+      } else if (document.selection && document.selection.type != "Control") {
+          e = document.selection.createRange().text
+      }
+      return e
+  }
+  jQuery(document.body).bind("copy cut paste", function (e) {
+    var content = getSelectionText();
+    var contentClean = content.substring(0, 499).replace(/\\(n|r\\n|r)/gm, "\\n "); // Represent new lines
+    var length = content.length;
+    ga('send', 'event', 'clipboard', e.type+' location: '+document.location.pathname, contentClean,
+    length, {'nonInteraction':1});
+  });
+  </script>
+
 	</body>
 </html>
