@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+		<!-- BASICS -->
+        <meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Puppet Fact Repository</title>
+        <meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="css/isotope.css" media="screen" />	
+		<link rel="stylesheet" href="js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="css/bootstrap.css">
+		<link rel="stylesheet" href="css/bootstrap-theme.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+
+		<!-- skin -->
+		<link rel="stylesheet" href="skin/default.css">
+    </head>
+	 
+    <body>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-57212832-1', 'auto');
+    ga('require', 'linkid', 'linkid.js');
+    ga('send', 'pageview');
+  </script>
+
+		<section class="featured">
+			<div class="container">
+				<div class="row mar-bot10">
+					<div class="col-md-6 col-md-offset-3">
+						
+						<div class="align-center">
+							<i class="fa fa-flask fa-5x"></i>
+							<h2 class="slogan">Puppet Fact Repository*</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- contact -->
+		<section id="section-contact" class="section appear clearfix">
+			<div class="container">
+				
+				<div class="row mar-bot20">
+					<div class="col-md-offset-2 col-md-8">
+						<div class="section-header">
+							<h2 class="section-heading animated" data-animation="bounceInUp">Share your facts</h2>
+              <p>The easiest way to help is to contribute facts via a copy-paste curl command, below:</p>
+                <div class="row">
+                <script>hljs.initHighlightingOnLoad();</script>
+                  <pre><code class="bash"> facter --json | curl -H "Content-Type: application/json" -d @- http://facts.whilefork.com </code></pre>
+                </div>
+                <p>If you prefer to copy and paste (perhaps if you're on windows and lack curl), submit your JSON fact hash as an issue on the <a href="https://github.com/danieldreier/puppet_spec_facts/issues">github project</a>. You can generate the json by running: </p>
+                <pre><code class="bash"> facter --json </code></pre>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+		<!-- spacer section:testimonial -->
+		<section id="section-services" class="section pad-bot10 bg-white" >
+		<div class="container">
+			<div class="row">
+        <div class="col-lg-12">
+            <div class="align-center">
+                  <div class="testimonial pad-top10 pad-bot10 clearfix">
+							      <h2 class="section-heading animated" data-animation="bounceInUp">What is this?</h2>
+                    <p>
+                    Puppet module developers often need facter output in rspec-puppet tests, but lack facter output for platforms they don't use. 
+                    As a result, lesser-used platforms (e.g. not Debian/Ubuntu/EL) often don't get much test coverage. 
+                    I'm trying to collect facter output from a wide range of platforms to lower the barrier to testing. These will be added to 
+                    the (not-yet-working) <a href="https://github.com/danieldreier/puppet_spec_facts">puppet_spec_facts</a> gem, which can be included in rspec-puppet tests
+                    when you need to iterate across platforms.
+                    </p>
+                    <br>
+                    <p>
+                    Please make sure there's nothing sensitive in your facter data. I'll do my best to sanitize sensitive information before publishing, 
+                    but anything you submit here will probably become public. You may want to save the JSON blob and edit hostnames, IP addresses, etc if 
+                    those are things you consider confidential.
+                    </p>
+                  </div>
+                  <div class="testimonial pad-top10 pad-bot10 clearfix">
+							      <h2 class="section-heading animated" data-animation="bounceInUp">How this helps testing</h2>
+                    <p>
+                    Puppet module developers (should) use rspec-puppet to validate conditional logic. One of the most common forms
+                    of conditional logic is to change behavior based on operating system or linux distribution. Unfortunately, most
+                    rspec-puppet tests only include a handful of relevant facts from one or two popular Linux distributions.
+                    The <a href="https://github.com/danieldreier/puppet_spec_facts">puppet_spec_facts</a> provides a flexible way to
+                    iterate across platforms with full facter facts. For example:
+                    </p>
+                    <br>
+                      <div class="row align-left">
+                      <script>hljs.initHighlightingOnLoad();</script>
+                        <pre><code class="rspec">
+                          require 'spec_helper'
+                          include PuppetSpecFacts # shown here, but should be included from spec_helper.rb
+
+                          describe 'example' do
+                            context 'all operating systems' do
+                              PuppetSpecFacts.puppet_platforms.each do |name, facthash|
+                              # at this point, name is a human-readable string like:
+                              # FreeBSD_10.0-RELEASE_amd64_3.6.2_structured
+                              # Debian_wheezy_7.7_i386_PE-3.3.2_stringified
+                              # CentOS_5.11_x86_64_3.7.1_structured
+                              # etc
+                                describe "example class without any parameters on #{name}" do
+                                  let(:params) {{ }}
+                                  let(:facts) { facts } # the facter output you sent in above is now available in rspec
+
+                                  it { should compile.with_all_deps }
+                                end
+                              end
+                            end
+                          end
+                        </code></pre>
+                      </div>
+                    <p>
+                    In the real world, you probably don't want to iterate through all of the platforms, so puppet_spec_facts allows you to query a subset based on facter facts:
+                    </p>
+                      <div class="row align-left">
+                      <script>hljs.initHighlightingOnLoad();</script>
+                        <pre><code class="rspec">
+                          require 'spec_helper'
+
+                          describe 'example' do
+                            context 'all operating systems' do
+                              PuppetSpecFacts.facts_for_platform_by_fact(select_facts: {'lsbdistid' => 'CentOS',
+                                                                                        'architecture' => 'x86_64',
+                                                                                        'is_pe' => 'true',
+                                                                                        'fact_style' => 'stringified'}) do |name, facthash|
+                              # This loads all fact sets for Puppet Enterprise on x86_64 CentOS with stringified-style facts
+                                describe "example class without any parameters on #{name}" do
+                                  let(:params) {{ }}
+                                  let(:facts) { facts } # the facter output you sent in above is now available in rspec
+
+                                  it { should compile.with_all_deps }
+                                end
+                              end
+                            end
+                          end
+                        </code></pre>
+                      </div>
+                    <p>
+                    If that seems cool, please submit facts from whatever platforms you're in contact with. I don't have any Windows boxes,
+                    commercial unix platforms (Solaris, HP/UX, etc), non-x86 architectures, etc. If you're running Illumos on your raspberry pi,
+                    I want to hear from you. If curl isn't available or the box has an outbound firewall, you can just run facter via SSH and pipe it to curl on your desktop: </p>
+                <div class="row">
+                <script>hljs.initHighlightingOnLoad();</script>
+                  <pre><code class="bash"> ssh daniel@server.example.com facter --json | curl -H "Content-Type: application/json" -d @- http://facts.whilefork.com </code></pre>
+                </div>
+
+                  </div>
+              </div>
+            </div>
+        </div>
+
+		</div>	
+		</section>
+
+		
+	<section id="footer" class="section footer">
+		<div class="container">
+			<div class="row align-center copyright">
+					<div class="col-sm-12"><p> * not a Puppet Labs project, I just liked the color scheme</p>
+			</div>
+		</div>
+  </div>
+  </section>
+
+	<script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.isotope.min.js"></script>
+	<script src="js/jquery.nicescroll.min.js"></script>
+	<script src="js/fancybox/jquery.fancybox.pack.js"></script>
+	<script src="js/skrollr.min.js"></script>		
+	<script src="js/jquery.scrollTo-1.4.3.1-min.js"></script>
+	<script src="js/jquery.localscroll-1.2.7-min.js"></script>
+	<script src="js/stellar.js"></script>
+	<script src="js/jquery.appear.js"></script>
+	<script src="js/validate.js"></script>
+    <script src="js/main.js"></script>
+
+  <script type="text/javascript">
+  // Track copied content adapted from Onderweg & Tim Down by Robert Kingston - http://www.optimisationbeacon.com/
+  // Get Selection Text function by Tim Down - http://stackoverflow.com/a/5379408/458627
+  function getSelectionText() {
+      var e = "";
+      if (window.getSelection) {
+          e = window.getSelection().toString()
+      } else if (document.selection && document.selection.type != "Control") {
+          e = document.selection.createRange().text
+      }
+      return e
+  }
+  jQuery(document.body).bind("copy cut paste", function (e) {
+    var content = getSelectionText();
+    var contentClean = content.substring(0, 499).replace(/\\(n|r\\n|r)/gm, "\\n "); // Represent new lines
+    var length = content.length;
+    ga('send', 'event', 'clipboard', e.type+' location: '+document.location.pathname, contentClean,
+    length, {'nonInteraction':1});
+  });
+  </script>
+
+	</body>
+</html>
